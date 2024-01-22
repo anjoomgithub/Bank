@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Application Form</title>
+    <style>
+        body {
+         background: linear-gradient(to bottom, #001f3f, #ffffff); /* Blend of navy blue and white */
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #4CAF50;
+            padding: 1em;
+            background: linear-gradient(to bottom, #001f3f, #003366); /* Darker blend of navy blue */
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        #form-container {
+            max-width: 500px;
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        form {
+            display: grid;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button[type="submit"] {
+            background-color: navy;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        #message-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Welcome to our Bank</h1>
+</header>
+
+<div id="form-container">
+    <form  action="account_application" method="POST" id="accountForm" enctype="multipart/form-data" onsubmit="submitForm(); return false;">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="dob">DOB:</label>
+        <input type="date" id="dob" name="dob" required>
+
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required>
+
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" required>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+        </select>
+
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" required>
+
+        <label for="mail">Mail ID:</label>
+        <input type="email" id="mail" name="mail" required>
+
+        <label for="address">Address:</label>
+        <textarea id="address" name="address" required></textarea>
+
+        <label for="district">District:</label>
+<select id="district" name="district" onchange="populateBranches()" required>
+    <option value="Ernakulam">Ernakulam</option>
+    <option value="Malappuram">Malappuram</option>
+    <option value="Kollam">Kollam</option>
+    <option value="Kozhikode">Kozhikode</option>
+    <option value="Thrissur">Thrissur</option>
+</select>
+
+<select id="branch" name="branch" required>
+    <option value="" disabled selected>Select Branch</option>
+</select>
+
+
+
+        <label for="account_type">Account Type:</label>
+        <select id="account_type" name="account_type" required>
+            <option value="savings">Savings Account</option>
+            <option value="current">Current Account</option>
+        </select>
+
+        <label>Materials Provide:</label>
+        <div>
+            <input type="checkbox" id="debitCard" name="materials" value="debitCard">
+            <label for="debitCard">Debit Card</label>
+
+            <input type="checkbox" id="creditCard" name="materials" value="creditCard">
+            <label for="creditCard">Credit Card</label>
+
+            <input type="checkbox" id="chequeBook" name="materials" value="chequeBook">
+            <label for="chequeBook">Cheque Book</label>
+            <!-- Add other material options as needed -->
+        </div>
+
+        <button type="submit">Submit</button>
+        <button type="submit">Logout</button>
+    </form>
+</div>
+
+<div id="message-container"></div>
+<script>
+        function populateBranches() {
+            // Get the selected district
+            var selectedDistrict = document.getElementById("district").value;
+
+            // Get the branch dropdown
+            var branchDropdown = document.getElementById("branch");
+
+            // Clear previous options
+            branchDropdown.innerHTML = "";
+
+            // Add a default option
+            branchDropdown.add(new Option("Select Branch", ""));
+
+            // Populate dummy options based on the selected district
+            switch (selectedDistrict) {
+                case "Ernakulam":
+                    branchDropdown.add(new Option("Edappally"));
+                    branchDropdown.add(new Option( "Aluva"));
+                    branchDropdown.add(new Option( "Konthuruthi"));
+                    break;
+
+                case "Malappuram":
+                    branchDropdown.add(new Option( "Kottakkal"));
+                    branchDropdown.add(new Option( "Tirur"));
+                    branchDropdown.add(new Option( "Manjeri"));
+                    break;
+
+                case "Kollam":
+                    branchDropdown.add(new Option( "Mayyanad"));
+                    branchDropdown.add(new Option( "Meenad"));
+                    branchDropdown.add(new Option( "Kottarakkara"));
+                    break;
+
+                case "Kozhikode":
+                    branchDropdown.add(new Option( "Vatakara"));
+                    branchDropdown.add(new Option( "Feroke"));
+                    branchDropdown.add(new Option( "Beypore"));
+                    break;
+
+                case "Thrissur":
+                    branchDropdown.add(new Option( "Guruvayoor"));
+                    branchDropdown.add(new Option( "Kadavallur"));
+                    branchDropdown.add(new Option( "Irinjalakkuda"));
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+    </script>
+
+</body>
+</html>
